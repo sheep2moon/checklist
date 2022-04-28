@@ -5,12 +5,17 @@ import TextInput from "../components/Inputs/TextInput.js";
 import { StyledButton } from "../components/Inputs/StyledButton.js";
 
 const Login = () => {
+  const handleLogin = (e) => {
+    console.log("handleLogin");
+    e.preventDefault();
+  };
+
   return (
     <BgContainer>
       <LoginWrapper>
         <FormWrapper>
           <Title>Login</Title>
-          <Form>
+          <Form onSubmit={(e) => handleLogin(e)}>
             <TextInput text={"Email"} />
             <TextInput text={"Password"} />
             <StyledButton>Login</StyledButton>

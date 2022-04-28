@@ -1,13 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { BgContainer } from "../components/BgContrainer.js";
+import DailyTasks from "../components/Dashboard/DailyTasks.js";
 import TimeBar from "../components/Dashboard/TimeBar.js";
 
 const Dashboard = () => {
+  const [pickedTime, setPickedTime] = useState(null);
   return (
     <BgContainer>
       <DashboardContainer>
-        <TimeBar />
+        <TimeBar pickedTime={pickedTime} setPickedTime={setPickedTime} />
+        <DailyTasks />
       </DashboardContainer>
     </BgContainer>
   );
@@ -16,10 +19,10 @@ const Dashboard = () => {
 export default Dashboard;
 
 const DashboardContainer = styled.div`
+  padding-top: 2rem;
   min-height: calc(100vh - 100px);
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   color: ${({ theme }) => theme.colors.detail};
 `;
