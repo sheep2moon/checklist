@@ -1,14 +1,19 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import TextInput from "../Inputs/TextInput.js";
+import TypeSelect from "./TypeSelect.js";
 
 const AddNewModal = ({ isNewModalOpen, setIsNewModalOpen }) => {
     const [title, setTitle] = useState("");
-
+    const [taskType, setTaskType] = useState("check");
     return (
         <Backdrop onClick={() => setIsNewModalOpen(false)}>
             <ModalWrap onClick={e => e.stopPropagation()}>
-                <TextInput label="Task title" />
+                <h2>Add new task</h2>
+                <TextInput label="Task title" value={title} setValue={setTitle} />
+                <TextInput label="Task description" />
+
+                <TypeSelect taskType={taskType} setTaskType={setTaskType} />
             </ModalWrap>
         </Backdrop>
     );
@@ -34,16 +39,13 @@ const ModalWrap = styled.div`
     border: ${({ theme }) => `2px solid ${theme.colors.darkBlue}`};
     border-radius: 2rem;
     z-index: 0;
-    padding: 4rem;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 1rem;
-`;
-
-const ThemeOption = styled.div`
-    padding: 1rem;
+    padding: 3rem;
     display: flex;
-    color: ${({ textColor }) => textColor};
-    background-color: ${({ bgColor }) => bgColor};
-    box-shadow: ${({ theme }) => theme.shadows.black80};
+    flex-direction: column;
+    gap: 1rem;
+
+    > h2 {
+        color: ${({ theme }) => theme.colors.accent};
+        padding-bottom: 1rem;
+    }
 `;
