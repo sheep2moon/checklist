@@ -4,36 +4,25 @@ import styled from "styled-components";
 import TextInput from "../components/Inputs/TextInput.js";
 import { StyledButton } from "../components/Inputs/StyledButton.js";
 import { useState } from "react";
-import { supabase } from "../supabase/supabaseConfig.js";
-import { useDispatch } from "react-redux";
-import { setUserData } from "../redux/userSlice.js";
 import { Link } from "react-router-dom";
-import { addToast } from "../redux/toastSlice.js";
+import { supabase } from "../supabase/supabaseConfig.js";
 
-const Login = () => {
+const Register = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [passwordConfirm, setPasswordConfirm] = useState("");
 
-    const dispatch = useDispatch();
-
-    const handleLogin = async e => {
-        console.log("handleLogin");
+    const handleRegister = async e => {
         e.preventDefault();
-        console.log(email, password);
-        const { user, error } = await supabase.auth.signIn({ email, password });
-        if (error) {
-            dispatch(addToast({ type: "error", message: error.message }));
-        } else {
-            dispatch(setUserData(user));
+        console.log("register");
+        console.log(e.target);
+        if (password === passwordConfirm && password.length > 5) {
+            let { user, error } = await supabase.auth.signUp({
+                email,
+                password
+            });
+            console.log(user, error);
         }
-    };
-
-    const handleGithubLogin = async () => {
-        let { user, error } = await supabase.auth.signIn({
-            provider: "github"
-        });
-        dispatch(setUserData(user));
-        console.log(user, error);
     };
 
     return (
@@ -41,13 +30,11 @@ const Login = () => {
             <LoginWrapper>
                 <FormWrapper>
                     <Title>Login</Title>
-                    <Form onSubmit={e => handleLogin(e)}>
+                    <Form onSubmit={handleRegister}>
                         <TextInput label={"Email"} value={email} setValue={setEmail} />
                         <TextInput type="password" label={"Password"} value={password} setValue={setPassword} />
-                        <StyledButton>Login</StyledButton>
-                        <RegisterLink to="/register">register</RegisterLink>
-                        <p>or</p>
-                        <StyledButton onClick={handleGithubLogin}>Login with Github</StyledButton>
+                        <TextInput type="password" label={"Confirm-Password"} value={passwordConfirm} setValue={setPasswordConfirm} />
+                        <StyledButton type="submit">Register</StyledButton>
                     </Form>
                 </FormWrapper>
             </LoginWrapper>
@@ -55,7 +42,7 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default Register;
 
 const LoginWrapper = styled.div`
     width: 100%;

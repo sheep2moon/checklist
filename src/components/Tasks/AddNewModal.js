@@ -1,19 +1,46 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { StyledButton } from "../Inputs/StyledButton.js";
 import TextInput from "../Inputs/TextInput.js";
 import TypeSelect from "./TypeSelect.js";
+import { useDispatch, useSelector } from "react-redux";
+import { addToast } from "../../redux/toastSlice.js";
+import { supabase } from "../../supabase/supabaseConfig.js";
 
 const AddNewModal = ({ isNewModalOpen, setIsNewModalOpen }) => {
-    const [title, setTitle] = useState("");
+    const [name, setName] = useState("");
     const [taskType, setTaskType] = useState("check");
+
+    const { user_id } = useSelector(store => store.user);
+
+    const dispatch = useDispatch();
+
+    const handleAddTask = async () => {
+        console.log("id", user_id);
+
+        const newTask = {
+            user_id,
+            name,
+            type: taskType,
+            progress: 0
+        };
+
+        const { data, error } = await supabase.from("tasks").insert([newTask]);
+        if (error) {
+            dispatch(addToast({ type: "error", message: error.message }));
+        } else {
+            dispatch(addToast({ type: "success", message: "Task Added" }));
+        }
+    };
+
     return (
         <Backdrop onClick={() => setIsNewModalOpen(false)}>
             <ModalWrap onClick={e => e.stopPropagation()}>
                 <h2>Add new task</h2>
-                <TextInput label="Task title" value={title} setValue={setTitle} />
+                <TextInput label="Task title" value={name} setValue={setName} />
                 <TextInput label="Task description" />
-
                 <TypeSelect taskType={taskType} setTaskType={setTaskType} />
+                <StyledButton onClick={handleAddTask}>Add</StyledButton>
             </ModalWrap>
         </Backdrop>
     );
