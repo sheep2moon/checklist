@@ -2,10 +2,7 @@ import React from "react";
 import { useState } from "react";
 import styled from "styled-components";
 
-const TypeSelect = ({ taskType, setTaskType }) => {
-    const [counterStep, setCounterStep] = useState(1);
-    const [partsCount, setPartsCount] = useState(1);
-
+const TypeSelect = ({ taskType, setTaskType, taskValue, setTaskValue }) => {
     return (
         <TypeContainer>
             <p>Select type of task</p>
@@ -23,9 +20,16 @@ const TypeSelect = ({ taskType, setTaskType }) => {
             <TypeDetails>
                 {taskType === "parts" && (
                     <PartsInputWrap>
-                        <span onClick={() => setPartsCount(partsCount - 1)}>-</span>
-                        <span>{partsCount}</span>
-                        <span onClick={() => setPartsCount(partsCount + 1)}>+</span>
+                        <span onClick={() => setTaskValue(taskValue - 1)}>-</span>
+                        <span>{taskValue}</span>
+                        <span onClick={() => setTaskValue(taskValue + 1)}>+</span>
+                    </PartsInputWrap>
+                )}
+                {taskType === "counter" && (
+                    <PartsInputWrap>
+                        <p>step</p>
+
+                        <input type="number" size={420} />
                     </PartsInputWrap>
                 )}
             </TypeDetails>
@@ -51,11 +55,27 @@ const TypeDetails = styled.div`
     justify-content: center;
 `;
 const PartsInputWrap = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 1rem;
     span {
         font-size: 1.4rem;
-        border: 1px solid #ffffff10;
+        border: 1px solid #ffffff20;
         padding: 0.5rem;
+        height: 2rem;
+        display: flex;
+        align-items: center;
+    }
+    input {
+        max-width: 100px;
+        height: 2rem;
+        border: 1px solid #ffffff20;
+        background: none;
+        padding: 0.5rem 0;
+        margin-left: 1rem;
+        color: ${({ theme }) => theme.colors.detail};
+        font-size: 1.2rem;
     }
 `;
 

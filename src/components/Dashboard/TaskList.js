@@ -1,31 +1,25 @@
 import React from "react";
 import styled from "styled-components";
-import CheckboxTask from "./CheckboxTask.js";
-import NumberTask from "./NumberTask.js";
+import CheckboxTask from "../Tasks/CheckboxTask.js";
 import { MdAddTask } from "react-icons/md";
 import { useState } from "react";
-import AddNewModal from "../Tasks/AddNewModal.js";
 
-const tempTasks = [
-    {
-        name: "run at least 3km",
-        type: "checkbox",
-        value: false
-    },
-    {
-        name: "read at least 10 page of any book",
-        type: "checkbox",
-        value: false
-    },
-    {
-        name: "make some pushups",
-        type: "number",
-        value: 0
-    }
-];
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { fetchUserTasks } from "../../redux/userSlice.js";
+import CounterTask from "../Tasks/CounterTask.js";
+import PartsTask from "../Tasks/PartsTask.js";
+import AddNewModal from "./NewTask/AddNewModal.js";
 
-const DailyTasks = () => {
+const TaskList = () => {
     const [isNewModalOpen, setIsNewModalOpen] = useState(false);
+    const { user_id, tasks } = useSelector(store => store.user);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(fetchUserTasks(user_id));
+    }, [dispatch, user_id]);
+
     return (
         <>
             {isNewModalOpen && <AddNewModal setIsNewModalOpen={setIsNewModalOpen} />}
@@ -37,20 +31,23 @@ const DailyTasks = () => {
                         <MdAddTask />
                     </AddNewBtn>
                 </TopBar>
-                {tempTasks.map((task, index) => {
-                    if (task.type === "checkbox") {
-                        return <CheckboxTask key={task.name} index={index} task={task} />;
-                    } else if (task.type === "number") {
-                        return <NumberTask key={task.name} index={index} task={task} />;
-                    }
-                    return <p>invalid task type</p>;
-                })}
+                {tasks.length > 0 &&
+                    tasks.map((task, index) => {
+                        if (task.type === "checkbox") {
+                            return <CheckboxTask key={task.name} task={task} />;
+                        } else if (task.type === "counter") {
+                            return <CounterTask key={task.name} task={task} />;
+                        } else if (task.type === "parts") {
+                            return <PartsTask key={task.name} task={task} />;
+                        }
+                        return <p>invalid task type</p>;
+                    })}
             </TaskContainer>
         </>
     );
 };
 
-export default DailyTasks;
+export default TaskList;
 
 const TaskContainer = styled.div`
     width: 100%;

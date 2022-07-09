@@ -1,15 +1,18 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { StyledButton } from "../Inputs/StyledButton.js";
-import TextInput from "../Inputs/TextInput.js";
-import TypeSelect from "./TypeSelect.js";
 import { useDispatch, useSelector } from "react-redux";
-import { addToast } from "../../redux/toastSlice.js";
-import { supabase } from "../../supabase/supabaseConfig.js";
+import { addToast } from "../../../redux/toastSlice.js";
+import { supabase } from "../../../supabase/supabaseConfig.js";
+import TextInput from "../../Inputs/TextInput.js";
+import { StyledButton } from "../../Inputs/StyledButton.js";
+import TypeSelect from "./TypeSelect.js";
+import RepeatSelect from "./RepeatSelect.js";
 
 const AddNewModal = ({ isNewModalOpen, setIsNewModalOpen }) => {
     const [name, setName] = useState("");
     const [taskType, setTaskType] = useState("check");
+    const [taskValue, setTaskValue] = useState(0);
+    const [repeatEvery, setReapeatEvery] = useState(1);
 
     const { user_id } = useSelector(store => store.user);
 
@@ -38,8 +41,9 @@ const AddNewModal = ({ isNewModalOpen, setIsNewModalOpen }) => {
             <ModalWrap onClick={e => e.stopPropagation()}>
                 <h2>Add new task</h2>
                 <TextInput label="Task title" value={name} setValue={setName} />
-                <TextInput label="Task description" />
-                <TypeSelect taskType={taskType} setTaskType={setTaskType} />
+                <p>Repeat every:</p>
+                <RepeatInput />
+                <TypeSelect taskType={taskType} setTaskType={setTaskType} taskValue={taskValue} setTaskValue={setTaskValue} />
                 <StyledButton onClick={handleAddTask}>Add</StyledButton>
             </ModalWrap>
         </Backdrop>
@@ -70,9 +74,18 @@ const ModalWrap = styled.div`
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    width: 380px;
 
     > h2 {
         color: ${({ theme }) => theme.colors.accent};
         padding-bottom: 1rem;
     }
+`;
+
+const RepeatInput = styled.input`
+    height: 2rem;
+    width: 4rem;
+    font-size: 1.2rem;
+    border: ${({ theme }) => `1px solid ${theme.colors.detail}`};
+    background: none;
 `;

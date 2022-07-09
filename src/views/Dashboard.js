@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { BgContainer } from "../components/BgContrainer.js";
-import DailyTasks from "../components/Dashboard/DailyTasks.js";
+import TaskList from "../components/Dashboard/TaskList.js";
 import TimeBar from "../components/Dashboard/TimeBar.js";
 
 const Dashboard = () => {
@@ -10,7 +10,7 @@ const Dashboard = () => {
         <BgContainer>
             <DashboardContainer>
                 <TimeBar pickedTime={pickedTime} setPickedTime={setPickedTime} />
-                <DailyTasks />
+                <TaskList />
             </DashboardContainer>
         </BgContainer>
     );

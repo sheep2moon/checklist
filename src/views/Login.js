@@ -7,7 +7,7 @@ import { useState } from "react";
 import { supabase } from "../supabase/supabaseConfig.js";
 import { useDispatch } from "react-redux";
 import { setUserData } from "../redux/userSlice.js";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { addToast } from "../redux/toastSlice.js";
 
 const Login = () => {
@@ -15,16 +15,16 @@ const Login = () => {
     const [password, setPassword] = useState("");
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const handleLogin = async e => {
-        console.log("handleLogin");
         e.preventDefault();
-        console.log(email, password);
         const { user, error } = await supabase.auth.signIn({ email, password });
         if (error) {
             dispatch(addToast({ type: "error", message: error.message }));
         } else {
             dispatch(setUserData(user));
+            navigate("/");
         }
     };
 
