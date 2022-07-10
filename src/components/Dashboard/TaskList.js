@@ -6,10 +6,12 @@ import { useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { fetchUserTasks } from "../../redux/userSlice.js";
+import { fetchUserTasks, setUserTasks } from "../../redux/userSlice.js";
 import CounterTask from "../Tasks/CounterTask.js";
 import PartsTask from "../Tasks/PartsTask.js";
 import AddNewModal from "./NewTask/AddNewModal.js";
+import Task from "../Tasks/Task.js";
+import { supabase } from "../../supabase/supabaseConfig.js";
 
 const TaskList = () => {
     const [isNewModalOpen, setIsNewModalOpen] = useState(false);
@@ -17,7 +19,10 @@ const TaskList = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(fetchUserTasks(user_id));
+        if (user_id) {
+            const promise = dispatch(fetchUserTasks(user_id));
+            return () => promise.abort();
+        }
     }, [dispatch, user_id]);
 
     return (
@@ -31,17 +36,7 @@ const TaskList = () => {
                         <MdAddTask />
                     </AddNewBtn>
                 </TopBar>
-                {tasks.length > 0 &&
-                    tasks.map((task, index) => {
-                        if (task.type === "checkbox") {
-                            return <CheckboxTask key={task.name} task={task} />;
-                        } else if (task.type === "counter") {
-                            return <CounterTask key={task.name} task={task} />;
-                        } else if (task.type === "parts") {
-                            return <PartsTask key={task.name} task={task} />;
-                        }
-                        return <p>invalid task type</p>;
-                    })}
+                {tasks.length > 0 && tasks.map((task, index) => <Task key={`${task.id}-${task.name}`} task={task} index={index} />)}
             </TaskContainer>
         </>
     );

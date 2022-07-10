@@ -6,26 +6,26 @@ import { supabase } from "../../../supabase/supabaseConfig.js";
 import TextInput from "../../Inputs/TextInput.js";
 import { StyledButton } from "../../Inputs/StyledButton.js";
 import TypeSelect from "./TypeSelect.js";
-import RepeatSelect from "./RepeatSelect.js";
+import { fetchUserTasks } from "../../../redux/userSlice.js";
 
 const AddNewModal = ({ isNewModalOpen, setIsNewModalOpen }) => {
     const [name, setName] = useState("");
     const [taskType, setTaskType] = useState("check");
     const [taskValue, setTaskValue] = useState(0);
     const [repeatEvery, setReapeatEvery] = useState(1);
+    const [taskStep, setTaskStep] = useState(1);
 
     const { user_id } = useSelector(store => store.user);
 
     const dispatch = useDispatch();
 
     const handleAddTask = async () => {
-        console.log("id", user_id);
-
         const newTask = {
             user_id,
             name,
             type: taskType,
-            progress: 0
+            progress: 0,
+            step: taskStep
         };
 
         const { data, error } = await supabase.from("tasks").insert([newTask]);
@@ -33,6 +33,8 @@ const AddNewModal = ({ isNewModalOpen, setIsNewModalOpen }) => {
             dispatch(addToast({ type: "error", message: error.message }));
         } else {
             dispatch(addToast({ type: "success", message: "Task Added" }));
+            dispatch(fetchUserTasks(user_id));
+            setIsNewModalOpen(false);
         }
     };
 
@@ -42,8 +44,8 @@ const AddNewModal = ({ isNewModalOpen, setIsNewModalOpen }) => {
                 <h2>Add new task</h2>
                 <TextInput label="Task title" value={name} setValue={setName} />
                 <p>Repeat every:</p>
-                <RepeatInput />
-                <TypeSelect taskType={taskType} setTaskType={setTaskType} taskValue={taskValue} setTaskValue={setTaskValue} />
+                <RepeatInput value={repeatEvery} onChange={e => setReapeatEvery(e.target.value)} />
+                <TypeSelect taskType={taskType} setTaskType={setTaskType} taskValue={taskValue} setTaskValue={setTaskValue} taskStep={taskStep} setTaskStep={setTaskStep} />
                 <StyledButton onClick={handleAddTask}>Add</StyledButton>
             </ModalWrap>
         </Backdrop>
@@ -83,9 +85,16 @@ const ModalWrap = styled.div`
 `;
 
 const RepeatInput = styled.input`
+    max-width: 100px;
     height: 2rem;
-    width: 4rem;
-    font-size: 1.2rem;
-    border: ${({ theme }) => `1px solid ${theme.colors.detail}`};
+    border: none;
     background: none;
+    background-color: ${({ theme }) => theme.colors.secondary};
+    border-bottom: ${({ theme }) => `1px solid ${theme.colors.detail}`};
+    padding: 0.5rem 0;
+    text-align: center;
+    padding-left: 0.5rem;
+    color: ${({ theme }) => theme.colors.detail};
+    font-size: 1.2rem;
+    outline: none;
 `;

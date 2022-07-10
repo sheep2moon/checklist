@@ -28,7 +28,6 @@ function App() {
         if (themeName) {
             const defaultTheme = themes.find(theme => theme.name === themeName);
             setActiveTheme(defaultTheme.src);
-            console.log(defaultTheme.src);
         }
     }, []);
 

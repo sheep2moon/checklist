@@ -1,15 +1,17 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { BgContainer } from "../components/BgContrainer.js";
+import SectionBar from "../components/Dashboard/SectionBar.js";
 import TaskList from "../components/Dashboard/TaskList.js";
 import TimeBar from "../components/Dashboard/TimeBar.js";
 
 const Dashboard = () => {
-    const [pickedTime, setPickedTime] = useState(null);
+    const [selectedSection, setSelectedSection] = useState("daily");
+
     return (
         <BgContainer>
             <DashboardContainer>
-                <TimeBar pickedTime={pickedTime} setPickedTime={setPickedTime} />
+                <SectionBar selectedSection={selectedSection} setSelectedSection={setSelectedSection} />
                 <TaskList />
             </DashboardContainer>
         </BgContainer>

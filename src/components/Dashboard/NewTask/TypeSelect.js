@@ -2,12 +2,16 @@ import React from "react";
 import { useState } from "react";
 import styled from "styled-components";
 
-const TypeSelect = ({ taskType, setTaskType, taskValue, setTaskValue }) => {
+const TypeSelect = ({ taskType, setTaskType, taskValue, setTaskValue, taskStep, setTaskStep }) => {
+    const handleStepChange = e => {
+        setTaskStep(e.target.value);
+    };
+
     return (
         <TypeContainer>
             <p>Select type of task</p>
             <TypeWrap>
-                <TypeOption onClick={() => setTaskType("check")} isActive={taskType === "check"}>
+                <TypeOption onClick={() => setTaskType("checkbox")} isActive={taskType === "checkbox"}>
                     Checkbox
                 </TypeOption>
                 <TypeOption onClick={() => setTaskType("counter")} isActive={taskType === "counter"}>
@@ -28,8 +32,7 @@ const TypeSelect = ({ taskType, setTaskType, taskValue, setTaskValue }) => {
                 {taskType === "counter" && (
                     <PartsInputWrap>
                         <p>step</p>
-
-                        <input type="number" size={420} />
+                        <input type="number" value={taskStep} size={420} onChange={handleStepChange} />
                     </PartsInputWrap>
                 )}
             </TypeDetails>
@@ -70,10 +73,14 @@ const PartsInputWrap = styled.div`
     input {
         max-width: 100px;
         height: 2rem;
-        border: 1px solid #ffffff20;
+        border: none;
         background: none;
+        background-color: ${({ theme }) => theme.colors.secondary};
+        border-bottom: ${({ theme }) => `1px solid ${theme.colors.detail}`};
         padding: 0.5rem 0;
+        text-align: center;
         margin-left: 1rem;
+        padding-left: 0.5rem;
         color: ${({ theme }) => theme.colors.detail};
         font-size: 1.2rem;
     }

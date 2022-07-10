@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-const CheckboxTask = ({ task, index }) => {
+const CheckboxTask = ({ task, setIsFinished }) => {
     const [isChecked, setIsChecked] = useState(task.value);
 
     const handleCheck = () => {
-        console.log("halo mnay");
-        setIsChecked(!isChecked);
+        if (task.is_finished) setIsFinished(false);
+        else setIsFinished(true);
     };
 
     const handleNameChange = () => {
@@ -17,10 +17,8 @@ const CheckboxTask = ({ task, index }) => {
 
     return (
         <TaskContainer>
-            <p>{index + 1}.</p>
             <TaskWrap>
-                <TaskName type="text" value={task.name} size={task.name.length} onChange={handleNameChange} />
-                <Checkbox onClick={handleCheck} isChecked={isChecked}>
+                <Checkbox onClick={handleCheck} isChecked={task.is_finished}>
                     <span />
                 </Checkbox>
             </TaskWrap>
@@ -33,10 +31,6 @@ export default CheckboxTask;
 const TaskContainer = styled.div`
     display: flex;
     align-items: center;
-    p {
-        font-size: 1.4rem;
-        width: 30px;
-    }
 `;
 const TaskWrap = styled.div`
     display: flex;
@@ -46,16 +40,7 @@ const TaskWrap = styled.div`
     width: 100%;
     padding: 0.25rem 0;
 `;
-const TaskName = styled.input`
-    max-width: 500px;
-    height: 30px;
-    background: none;
-    outline: none;
-    border: none;
-    color: ${({ theme }) => theme.colors.detail};
-    font-size: 1.4rem;
-    /* border-bottom: ${({ theme }) => `1px solid ${theme.colors.detail}`}; */
-`;
+
 const Checkbox = styled.div`
     width: 30px;
     height: 30px;
