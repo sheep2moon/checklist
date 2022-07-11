@@ -4,7 +4,6 @@ import styled from "styled-components";
 import TextInput from "../components/Inputs/TextInput.js";
 import { StyledButton } from "../components/Inputs/StyledButton.js";
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { supabase } from "../supabase/supabaseConfig.js";
 
 const Register = () => {
@@ -83,9 +82,4 @@ const Form = styled.form`
     align-items: center;
     gap: 2rem;
     justify-content: center;
-`;
-
-const RegisterLink = styled(Link)`
-    font-size: 2rem;
-    color: ${({ theme }) => theme.colors.detail};
 `;

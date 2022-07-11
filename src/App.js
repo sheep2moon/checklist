@@ -6,28 +6,21 @@ import Header from "./components/Header/index.js";
 import { store } from "./redux/store.js";
 import RequireAuth from "./router/RequireAuth.js";
 import RequireUnauth from "./router/RequireUnauth.js";
-import { horizon, comodo, beach, cream } from "./themes.js";
+import { themes } from "./themes.js";
 import Toasts from "./toast/Toasts.js";
 import Dashboard from "./views/Dashboard.js";
 import Login from "./views/Login.js";
 import MainPage from "./views/MainPage.js";
-import Register from "./views/Regitster.js";
+import Register from "./views/Register.js";
 
 function App() {
-    const themes = [
-        { name: "horizon", src: horizon },
-        { name: "comodo", src: comodo },
-        { name: "beach", src: beach },
-        { name: "cream", src: cream }
-    ];
-
-    const [activeTheme, setActiveTheme] = useState(themes[0].src);
+    const [activeTheme, setActiveTheme] = useState(themes[0]);
 
     useEffect(() => {
         const themeName = JSON.parse(localStorage.getItem("pickedTheme"));
         if (themeName) {
             const defaultTheme = themes.find(theme => theme.name === themeName);
-            setActiveTheme(defaultTheme.src);
+            setActiveTheme(defaultTheme);
         }
     }, []);
 

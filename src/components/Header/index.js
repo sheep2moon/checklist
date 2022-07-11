@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import logoSvg from "../../assets/logo.svg";
 import { ReactComponent as LogoComponent } from "../../assets/logo.svg";
 import { Link } from "react-router-dom";
 import { BiPalette, BiTask } from "react-icons/bi";
@@ -20,7 +19,7 @@ const Header = ({ setActiveTheme, themes }) => {
         if (isUserLoggedIn()) {
             dispatch(setUserData(supabase.auth.user()));
         }
-    }, []);
+    }, [dispatch]);
 
     return (
         <>

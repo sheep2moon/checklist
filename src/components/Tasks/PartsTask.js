@@ -1,21 +1,17 @@
 import React, { useState } from "react";
-import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import { updateColumn } from "../../redux/userSlice.js";
+import { setUnfinished, updateColumn } from "../../redux/userSlice.js";
 import { AddButton, SubButton } from "../Inputs/CounterButtons.js";
 
-const PartsTask = ({ task }) => {
+const PartsTask = ({ task, finishTask }) => {
     const [busy, setBusy] = useState(false);
     const dispatch = useDispatch();
-
-    console.log(task);
-
     const handleProgressUp = () => {
         if (!busy && task.progress < task.value) {
             setBusy(true);
             if (task.progress + 1 === task.value) {
-                dispatch(updateColumn({ task_id: task.id, column: "is_finished", val: true }));
+                finishTask();
             }
             dispatch(updateColumn({ task_id: task.id, column: "progress", val: task.progress + 1 }));
         }
@@ -25,7 +21,7 @@ const PartsTask = ({ task }) => {
         if (!busy && task.progress > 0) {
             setBusy(true);
             if (task.is_finished) {
-                dispatch(updateColumn({ task_id: task.id, column: "is_finished", val: false }));
+                dispatch(setUnfinished(task.id));
             }
             dispatch(updateColumn({ task_id: task.id, column: "progress", val: task.progress - 1 }));
         }
@@ -47,15 +43,15 @@ const PartsTask = ({ task }) => {
 export default PartsTask;
 
 const PartsTaskContainer = styled.div`
-    width: 300px;
-    display: grid;
-    grid-template-columns: ${({ grid }) => `repeat(${grid + 2},1fr)`};
+    display: flex;
+    align-items: center;
     gap: 4px;
     height: 2rem;
 `;
 
 const ProgressSlice = styled.div`
-    width: 100%;
+    width: 24px;
+    height: 100%;
     background-color: ${({ theme, isDone }) => (isDone ? theme.colors.detail : theme.colors.secondary)};
     border-radius: 4px;
 `;

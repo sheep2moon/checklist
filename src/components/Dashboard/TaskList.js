@@ -2,23 +2,13 @@ import React from "react";
 import styled from "styled-components";
 import { MdAddTask } from "react-icons/md";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import { fetchUserTasks } from "../../redux/userSlice.js";
+import { useSelector } from "react-redux";
 import AddNewModal from "./NewTask/AddNewModal.js";
 import Task from "../Tasks/Task.js";
 
 const TaskList = ({ section }) => {
     const [isNewModalOpen, setIsNewModalOpen] = useState(false);
-    const { user_id, tasks } = useSelector(store => store.user);
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-        if (user_id) {
-            const promise = dispatch(fetchUserTasks(user_id));
-            return () => promise.abort();
-        }
-    }, [dispatch, user_id]);
+    const { tasks } = useSelector(store => store.user);
 
     return (
         <>
@@ -33,17 +23,16 @@ const TaskList = ({ section }) => {
                 <h3>Current</h3>
                 <TaskWrapper>
                     {tasks.length > 0 &&
-                        tasks.map((task, index) => {
-                            console.log(section, task.section);
-                            if (task.section === section && task.is_finished === false) return <Task key={`${task.id}-${task.name}`} task={task} index={index} />;
+                        tasks.map(task => {
+                            if (task.section === section && task.is_finished === false) return <Task key={`${task.id}-${task.name}`} task={task} />;
                             else return <span key={task.id}></span>;
                         })}
                 </TaskWrapper>
                 <h3>Finished</h3>
                 <TaskWrapper>
                     {tasks.length > 0 &&
-                        tasks.map((task, index) => {
-                            if (task.section === section && task.is_finished === true) return <Task key={`${task.id}-${task.name}`} task={task} index={index} />;
+                        tasks.map(task => {
+                            if (task.section === section && task.is_finished === true) return <Task key={`${task.id}-${task.name}`} task={task} />;
                             else return <span key={task.id}></span>;
                         })}
                 </TaskWrapper>
@@ -56,7 +45,7 @@ export default TaskList;
 
 const TaskContainer = styled.div`
     width: 100%;
-    max-width: 1200px;
+    padding: 0 1rem;
     margin-top: 2rem;
     display: flex;
     flex-direction: column;

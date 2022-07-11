@@ -1,7 +1,8 @@
 import React from "react";
-import styled, { useTheme } from "styled-components";
+import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { removeToast } from "../redux/toastSlice.js";
+import Confetti from "./Confetti.js";
 
 const Toasts = () => {
     const { list } = useSelector(store => store.toast);
@@ -12,16 +13,19 @@ const Toasts = () => {
         setTimeout(() => dispatch(removeToast(id)), 5000);
     };
     return (
-        <ToastContainer>
-            {list.map(toast => {
-                handleCloseTimeout(toast.id);
-                return (
-                    <Toast key={toast.id} type={toast.type} id={toast.id}>
-                        {toast.message}
-                    </Toast>
-                );
-            })}
-        </ToastContainer>
+        <>
+            <Confetti />
+            <ToastContainer>
+                {list.map(toast => {
+                    handleCloseTimeout(toast.id);
+                    return (
+                        <Toast key={toast.id} type={toast.type} id={toast.id}>
+                            {toast.message}
+                        </Toast>
+                    );
+                })}
+            </ToastContainer>
+        </>
     );
 };
 
@@ -30,7 +34,8 @@ export default Toasts;
 const ToastContainer = styled.div`
     position: fixed;
     top: 2rem;
-    left: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
     flex-direction: column;
     gap: 1rem;

@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { supabase } from "../supabase/supabaseConfig.js";
+import { checkIsToday } from "../utils/isToday.js";
 
 const initialState = {
     user_id: "",
@@ -28,7 +29,19 @@ export const updateColumn = createAsyncThunk("user/update-task", async req => {
     return res.data;
 });
 
-export const userSlice = createSlice({
+export const setFinished = createAsyncThunk("user/finish-task", async task_id => {
+    const now = parseInt(Date.now() / 1000);
+    await supabase.from("tasks").update({ is_finished: true }).eq("id", task_id);
+    const { data } = await supabase.from("tasks").update({ time: now }).eq("id", task_id);
+    return data;
+});
+export const setUnfinished = createAsyncThunk("user/unfinish-task", async task_id => {
+    await supabase.from("tasks").update({ is_finished: false }).eq("id", task_id);
+    const { data } = await supabase.from("tasks").update({ time: 0 }).eq("id", task_id);
+    return data;
+});
+
+const userSlice = createSlice({
     name: "user",
     initialState,
     reducers: {
@@ -45,14 +58,27 @@ export const userSlice = createSlice({
         builder
             .addCase(fetchUserTasks.fulfilled, (state, action) => {
                 if (action.payload) {
-                    state.tasks = action.payload;
-                    console.log(action.payload);
+                    const tasks = action.payload;
+                    let filteredTasks = [];
+                    tasks.forEach(task => {
+                        if (!checkIsToday(task.time) && task.is_finished && task.type === "daily") filteredTasks.push({ ...task, is_finished: false });
+                        else filteredTasks.push(task);
+                    });
+                    state.tasks = filteredTasks;
                 }
             })
             .addCase(deleteTask.fulfilled, (state, action) => {
                 state.tasks = state.tasks.filter(task => task.id !== action.payload[0].id);
             })
             .addCase(updateColumn.fulfilled, (state, action) => {
+                const index = state.tasks.findIndex(t => t.id === action.payload[0].id);
+                state.tasks[index] = action.payload[0];
+            })
+            .addCase(setFinished.fulfilled, (state, action) => {
+                const index = state.tasks.findIndex(t => t.id === action.payload[0].id);
+                state.tasks[index] = action.payload[0];
+            })
+            .addCase(setUnfinished.fulfilled, (state, action) => {
                 const index = state.tasks.findIndex(t => t.id === action.payload[0].id);
                 state.tasks[index] = action.payload[0];
             });

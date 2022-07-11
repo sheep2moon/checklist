@@ -1,35 +1,41 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import { deleteTask, updateColumn } from "../../redux/userSlice.js";
+import { deleteTask, setFinished } from "../../redux/userSlice.js";
 import CheckboxTask from "./CheckboxTask.js";
 import CounterTask from "./CounterTask.js";
 import PartsTask from "./PartsTask.js";
+import { BsTrash } from "react-icons/bs";
+import { toggleConfetti } from "../../redux/toastSlice.js";
 
-const Task = ({ task, index }) => {
+const Task = ({ task }) => {
     const dispatch = useDispatch();
 
     const handleDeleteTask = () => {
         dispatch(deleteTask(task.id));
     };
-    const setIsFinished = val => {
-        dispatch(updateColumn({ task_id: task.id, column: "is_finished", val }));
+
+    const finishTask = () => {
+        dispatch(setFinished(task.id));
+        dispatch(toggleConfetti());
     };
 
     return (
-        <TaskWrapper>
-            <p>{index + 1}.</p>
-            <TaskName>{task.name}</TaskName>
-            <TaskContent>
-                {task.type === "checkbox" && <CheckboxTask task={task} setIsFinished={setIsFinished} />}
-                {task.type === "counter" && <CounterTask task={task} />}
-                {task.type === "parts" && <PartsTask task={task} />}
-                <Controls>
-                    <button>edit</button>
-                    <button onClick={handleDeleteTask}>delete</button>
-                </Controls>
-            </TaskContent>
-        </TaskWrapper>
+        <>
+            <TaskWrapper>
+                <TaskName>{task.name}</TaskName>
+                <TaskContent>
+                    {task.type === "checkbox" && <CheckboxTask task={task} finishTask={finishTask} />}
+                    {task.type === "counter" && <CounterTask task={task} finishTask={finishTask} />}
+                    {task.type === "parts" && <PartsTask task={task} finishTask={finishTask} />}
+                    <Controls>
+                        <button onClick={handleDeleteTask}>
+                            <BsTrash />
+                        </button>
+                    </Controls>
+                </TaskContent>
+            </TaskWrapper>
+        </>
     );
 };
 
@@ -41,11 +47,7 @@ const TaskWrapper = styled.div`
     align-items: center;
     font-size: 1.4rem;
     box-shadow: ${({ theme }) => theme.shadows.black40};
-    > p {
-        padding: 0.25rem 0.5rem;
-        color: ${({ theme }) => theme.colors.accent};
-        width: 3rem;
-    }
+    height: 4rem;
 `;
 const TaskContent = styled.div`
     width: 100%;
@@ -63,6 +65,12 @@ const Controls = styled.div`
         color: ${({ theme }) => theme.colors.detail};
         padding: 0.25rem 0.5rem;
         font-size: 1.2rem;
+        display: flex;
+        align-items: center;
+        :hover {
+            color: ${({ theme }) => theme.colors.accent};
+            cursor: pointer;
+        }
     }
 `;
 
@@ -70,4 +78,5 @@ const TaskName = styled.h4`
     color: ${({ theme }) => theme.colors.detail};
     font-size: 1.4rem;
     width: 500px;
+    margin-left: 0.5rem;
 `;

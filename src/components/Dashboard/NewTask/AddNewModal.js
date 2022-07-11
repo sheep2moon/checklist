@@ -13,7 +13,7 @@ const AddNewModal = ({ section, isNewModalOpen, setIsNewModalOpen }) => {
     const [taskType, setTaskType] = useState("checkbox");
     const [taskValue, setTaskValue] = useState(0);
     const [taskStep, setTaskStep] = useState(1);
-
+    const [taskTarget, setTaskTarget] = useState(0);
     const { user_id } = useSelector(store => store.user);
 
     const dispatch = useDispatch();
@@ -26,6 +26,7 @@ const AddNewModal = ({ section, isNewModalOpen, setIsNewModalOpen }) => {
             progress: 0,
             step: taskStep,
             value: taskValue,
+            target: taskTarget,
             section
         };
 
@@ -39,12 +40,23 @@ const AddNewModal = ({ section, isNewModalOpen, setIsNewModalOpen }) => {
         }
     };
 
+    const typeSelectProps = {
+        taskType,
+        taskValue,
+        taskStep,
+        taskTarget,
+        setTaskType,
+        setTaskValue,
+        setTaskStep,
+        setTaskTarget
+    };
+
     return (
         <Backdrop onClick={() => setIsNewModalOpen(false)}>
             <ModalWrap onClick={e => e.stopPropagation()}>
                 <h2>Add new task</h2>
                 <TextInput label="Task title" value={name} setValue={setName} />
-                <TypeSelect taskType={taskType} setTaskType={setTaskType} taskValue={taskValue} setTaskValue={setTaskValue} taskStep={taskStep} setTaskStep={setTaskStep} />
+                <TypeSelect {...typeSelectProps} />
                 <StyledButton onClick={handleAddTask}>Add</StyledButton>
             </ModalWrap>
         </Backdrop>

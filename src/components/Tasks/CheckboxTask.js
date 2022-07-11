@@ -1,18 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
+import { setUnfinished } from "../../redux/userSlice.js";
 
-const CheckboxTask = ({ task, setIsFinished }) => {
-    const [isChecked, setIsChecked] = useState(task.value);
+const CheckboxTask = ({ task, finishTask }) => {
+    const dispatch = useDispatch();
 
     const handleCheck = () => {
-        if (task.is_finished) setIsFinished(false);
-        else setIsFinished(true);
-    };
-
-    const handleNameChange = () => {
-        console.log("NAMECHANGE");
-
-        //TODO
+        if (task.is_finished) dispatch(setUnfinished(task.id));
+        else finishTask();
     };
 
     return (
