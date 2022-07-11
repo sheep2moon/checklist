@@ -8,7 +8,7 @@ import { fetchUserTasks } from "../../redux/userSlice.js";
 import AddNewModal from "./NewTask/AddNewModal.js";
 import Task from "../Tasks/Task.js";
 
-const TaskList = ({ section }) => {
+const TargetsTaskList = () => {
     const [isNewModalOpen, setIsNewModalOpen] = useState(false);
     const { user_id, tasks } = useSelector(store => store.user);
     const dispatch = useDispatch();
@@ -22,37 +22,26 @@ const TaskList = ({ section }) => {
 
     return (
         <>
-            {isNewModalOpen && <AddNewModal section={section} setIsNewModalOpen={setIsNewModalOpen} />}
+            {isNewModalOpen && <AddNewModal section="targets" setIsNewModalOpen={setIsNewModalOpen} />}
             <TaskContainer>
                 <TopBar>
+                    <h2>Targets</h2>
                     <AddNewBtn onClick={() => setIsNewModalOpen(true)}>
                         Add new task
                         <MdAddTask />
                     </AddNewBtn>
                 </TopBar>
-                <h3>Current</h3>
-                <TaskWrapper>
-                    {tasks.length > 0 &&
-                        tasks.map((task, index) => {
-                            console.log(section, task.section);
-                            if (task.section === section && task.is_finished === false) return <Task key={`${task.id}-${task.name}`} task={task} index={index} />;
-                            else return <span key={task.id}></span>;
-                        })}
-                </TaskWrapper>
-                <h3>Finished</h3>
-                <TaskWrapper>
-                    {tasks.length > 0 &&
-                        tasks.map((task, index) => {
-                            if (task.section === section && task.is_finished === true) return <Task key={`${task.id}-${task.name}`} task={task} index={index} />;
-                            else return <span key={task.id}></span>;
-                        })}
-                </TaskWrapper>
+                {tasks.length > 0 &&
+                    tasks.map((task, index) => {
+                        if (task.section === "targets") return <Task key={`${task.id}-${task.name}`} task={task} index={index} />;
+                        else return <span key={task.id}></span>;
+                    })}
             </TaskContainer>
         </>
     );
 };
 
-export default TaskList;
+export default TargetsTaskList;
 
 const TaskContainer = styled.div`
     width: 100%;
@@ -61,9 +50,7 @@ const TaskContainer = styled.div`
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    h3 {
-        border-bottom: ${({ theme }) => `1px solid ${theme.colors.detail}`};
-        margin-top: 1rem;
+    h2 {
     }
 `;
 const TopBar = styled.div`
@@ -95,10 +82,4 @@ const AddNewBtn = styled.button`
         margin-left: 1rem;
         color: ${({ theme }) => theme.colors.accent};
     }
-`;
-
-const TaskWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
 `;

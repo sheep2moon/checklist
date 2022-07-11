@@ -8,11 +8,10 @@ import { StyledButton } from "../../Inputs/StyledButton.js";
 import TypeSelect from "./TypeSelect.js";
 import { fetchUserTasks } from "../../../redux/userSlice.js";
 
-const AddNewModal = ({ isNewModalOpen, setIsNewModalOpen }) => {
+const AddNewModal = ({ section, isNewModalOpen, setIsNewModalOpen }) => {
     const [name, setName] = useState("");
-    const [taskType, setTaskType] = useState("check");
+    const [taskType, setTaskType] = useState("checkbox");
     const [taskValue, setTaskValue] = useState(0);
-    const [repeatEvery, setReapeatEvery] = useState(1);
     const [taskStep, setTaskStep] = useState(1);
 
     const { user_id } = useSelector(store => store.user);
@@ -25,7 +24,9 @@ const AddNewModal = ({ isNewModalOpen, setIsNewModalOpen }) => {
             name,
             type: taskType,
             progress: 0,
-            step: taskStep
+            step: taskStep,
+            value: taskValue,
+            section
         };
 
         const { data, error } = await supabase.from("tasks").insert([newTask]);
@@ -43,8 +44,6 @@ const AddNewModal = ({ isNewModalOpen, setIsNewModalOpen }) => {
             <ModalWrap onClick={e => e.stopPropagation()}>
                 <h2>Add new task</h2>
                 <TextInput label="Task title" value={name} setValue={setName} />
-                <p>Repeat every:</p>
-                <RepeatInput value={repeatEvery} onChange={e => setReapeatEvery(e.target.value)} />
                 <TypeSelect taskType={taskType} setTaskType={setTaskType} taskValue={taskValue} setTaskValue={setTaskValue} taskStep={taskStep} setTaskStep={setTaskStep} />
                 <StyledButton onClick={handleAddTask}>Add</StyledButton>
             </ModalWrap>
@@ -82,19 +81,4 @@ const ModalWrap = styled.div`
         color: ${({ theme }) => theme.colors.accent};
         padding-bottom: 1rem;
     }
-`;
-
-const RepeatInput = styled.input`
-    max-width: 100px;
-    height: 2rem;
-    border: none;
-    background: none;
-    background-color: ${({ theme }) => theme.colors.secondary};
-    border-bottom: ${({ theme }) => `1px solid ${theme.colors.detail}`};
-    padding: 0.5rem 0;
-    text-align: center;
-    padding-left: 0.5rem;
-    color: ${({ theme }) => theme.colors.detail};
-    font-size: 1.2rem;
-    outline: none;
 `;

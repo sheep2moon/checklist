@@ -40,9 +40,9 @@ const TaskWrapper = styled.div`
     display: flex;
     align-items: center;
     font-size: 1.4rem;
-
+    box-shadow: ${({ theme }) => theme.shadows.black40};
     > p {
-        padding: 0.25rem 0;
+        padding: 0.25rem 0.5rem;
         color: ${({ theme }) => theme.colors.accent};
         width: 3rem;
     }
@@ -50,6 +50,7 @@ const TaskWrapper = styled.div`
 const TaskContent = styled.div`
     width: 100%;
     display: flex;
+    height: 100%;
     align-items: center;
     justify-content: space-between;
 `;

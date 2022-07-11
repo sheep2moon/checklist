@@ -1,5 +1,4 @@
 import React from "react";
-import { useState } from "react";
 import styled from "styled-components";
 
 const TypeSelect = ({ taskType, setTaskType, taskValue, setTaskValue, taskStep, setTaskStep }) => {
@@ -7,9 +6,16 @@ const TypeSelect = ({ taskType, setTaskType, taskValue, setTaskValue, taskStep, 
         setTaskStep(e.target.value);
     };
 
+    const handlePartsUp = () => {
+        if (taskValue < 10) setTaskValue(taskValue + 1);
+    };
+    const handlePartsDown = () => {
+        if (taskValue > 1) setTaskValue(taskValue - 1);
+    };
+
     return (
         <TypeContainer>
-            <p>Select type of task</p>
+            <p>Type of task</p>
             <TypeWrap>
                 <TypeOption onClick={() => setTaskType("checkbox")} isActive={taskType === "checkbox"}>
                     Checkbox
@@ -23,17 +29,17 @@ const TypeSelect = ({ taskType, setTaskType, taskValue, setTaskValue, taskStep, 
             </TypeWrap>
             <TypeDetails>
                 {taskType === "parts" && (
-                    <PartsInputWrap>
-                        <span onClick={() => setTaskValue(taskValue - 1)}>-</span>
-                        <span>{taskValue}</span>
-                        <span onClick={() => setTaskValue(taskValue + 1)}>+</span>
-                    </PartsInputWrap>
+                    <TypeInputWrap>
+                        <button onClick={handlePartsDown}>-</button>
+                        <p>{taskValue}</p>
+                        <button onClick={handlePartsUp}>+</button>
+                    </TypeInputWrap>
                 )}
                 {taskType === "counter" && (
-                    <PartsInputWrap>
+                    <TypeInputWrap>
                         <p>step</p>
                         <input type="number" value={taskStep} size={420} onChange={handleStepChange} />
-                    </PartsInputWrap>
+                    </TypeInputWrap>
                 )}
             </TypeDetails>
         </TypeContainer>
@@ -44,7 +50,7 @@ export default TypeSelect;
 
 const TypeContainer = styled.div`
     > p {
-        padding-bottom: 0.5rem;
+        padding-bottom: 1rem;
     }
 `;
 
@@ -56,19 +62,31 @@ const TypeWrap = styled.div`
 const TypeDetails = styled.div`
     display: flex;
     justify-content: center;
+    height: 4rem;
 `;
-const PartsInputWrap = styled.div`
+const TypeInputWrap = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 1rem;
-    span {
+    gap: 1rem;
+    button {
+        background: ${({ theme }) => theme.colors.secondary};
+        color: ${({ theme }) => theme.colors.detail};
         font-size: 1.4rem;
-        border: 1px solid #ffffff20;
-        padding: 0.5rem;
-        height: 2rem;
-        display: flex;
-        align-items: center;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        width: 2.4rem;
+        height: 2.4rem;
+        transition: all 0.2s ease-in-out;
+        border: ${({ theme }) => `1px solid ${theme.colors.primary}`};
+        :hover {
+            transition: all 0.2s ease-in-out;
+            background: ${({ theme }) => theme.colors.primary};
+            border: ${({ theme }) => `1px solid ${theme.colors.secondary}`};
+            color: ${({ theme }) => theme.colors.detail};
+            cursor: pointer;
+        }
     }
     input {
         max-width: 100px;
@@ -84,9 +102,15 @@ const PartsInputWrap = styled.div`
         color: ${({ theme }) => theme.colors.detail};
         font-size: 1.2rem;
     }
+    > p {
+        text-align: center;
+        width: 2rem;
+    }
 `;
 
 const TypeOption = styled.button`
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
     width: 100%;
     height: 2rem;
     background: none;

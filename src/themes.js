@@ -1,5 +1,6 @@
 const shadows = {
     black80: "0 0 50px #00000080",
+    black40: "0 0 50px #00000040",
     white80: "0 2px 10px #ffffff80",
     accent: "0px 8px 4px -4px #F1D00A80"
 };

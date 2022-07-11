@@ -8,7 +8,7 @@ import { fetchUserTasks } from "../../redux/userSlice.js";
 import AddNewModal from "./NewTask/AddNewModal.js";
 import Task from "../Tasks/Task.js";
 
-const TaskList = ({ section }) => {
+const DailyTaskList = () => {
     const [isNewModalOpen, setIsNewModalOpen] = useState(false);
     const { user_id, tasks } = useSelector(store => store.user);
     const dispatch = useDispatch();
@@ -22,9 +22,10 @@ const TaskList = ({ section }) => {
 
     return (
         <>
-            {isNewModalOpen && <AddNewModal section={section} setIsNewModalOpen={setIsNewModalOpen} />}
+            {isNewModalOpen && <AddNewModal section="daily" setIsNewModalOpen={setIsNewModalOpen} />}
             <TaskContainer>
                 <TopBar>
+                    <h2>Daily</h2>
                     <AddNewBtn onClick={() => setIsNewModalOpen(true)}>
                         Add new task
                         <MdAddTask />
@@ -34,8 +35,7 @@ const TaskList = ({ section }) => {
                 <TaskWrapper>
                     {tasks.length > 0 &&
                         tasks.map((task, index) => {
-                            console.log(section, task.section);
-                            if (task.section === section && task.is_finished === false) return <Task key={`${task.id}-${task.name}`} task={task} index={index} />;
+                            if (task.section === "daily" && task.is_finished === false) return <Task key={`${task.id}-${task.name}`} task={task} index={index} />;
                             else return <span key={task.id}></span>;
                         })}
                 </TaskWrapper>
@@ -43,7 +43,7 @@ const TaskList = ({ section }) => {
                 <TaskWrapper>
                     {tasks.length > 0 &&
                         tasks.map((task, index) => {
-                            if (task.section === section && task.is_finished === true) return <Task key={`${task.id}-${task.name}`} task={task} index={index} />;
+                            if (task.section === "daily" && task.is_finished === true) return <Task key={`${task.id}-${task.name}`} task={task} index={index} />;
                             else return <span key={task.id}></span>;
                         })}
                 </TaskWrapper>
@@ -52,7 +52,7 @@ const TaskList = ({ section }) => {
     );
 };
 
-export default TaskList;
+export default DailyTaskList;
 
 const TaskContainer = styled.div`
     width: 100%;
@@ -100,5 +100,4 @@ const AddNewBtn = styled.button`
 const TaskWrapper = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 4px;
 `;
