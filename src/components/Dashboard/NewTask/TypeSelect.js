@@ -2,15 +2,11 @@ import React from "react";
 import styled from "styled-components";
 
 const TypeSelect = ({ taskType, setTaskType, taskValue, setTaskValue, taskStep, setTaskStep, taskTarget, setTaskTarget }) => {
-    const handleStepChange = e => {
-        setTaskStep(e.target.value);
-    };
-
     const handlePartsUp = () => {
-        if (taskValue < 10) setTaskValue(taskValue + 1);
+        if (taskTarget < 10) setTaskTarget(taskTarget + 1);
     };
     const handlePartsDown = () => {
-        if (taskValue > 1) setTaskValue(taskValue - 1);
+        if (taskTarget > 1) setTaskTarget(taskTarget - 1);
     };
 
     return (
@@ -31,7 +27,7 @@ const TypeSelect = ({ taskType, setTaskType, taskValue, setTaskValue, taskStep, 
                 {taskType === "parts" && (
                     <TypeInputWrap>
                         <button onClick={handlePartsDown}>-</button>
-                        <p>{taskValue}</p>
+                        <p>{taskTarget}</p>
                         <button onClick={handlePartsUp}>+</button>
                     </TypeInputWrap>
                 )}

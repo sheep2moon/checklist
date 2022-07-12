@@ -8,32 +8,32 @@ const PartsTask = ({ task, finishTask }) => {
     const [busy, setBusy] = useState(false);
     const dispatch = useDispatch();
     const handleProgressUp = () => {
-        if (!busy && task.progress < task.value) {
+        if (!busy && task.value < task.target) {
             setBusy(true);
-            if (task.progress + 1 === task.value) {
+            if (task.value + 1 === task.target) {
                 finishTask();
             }
-            dispatch(updateColumn({ task_id: task.id, column: "progress", val: task.progress + 1 }));
+            dispatch(updateColumn({ task_id: task.id, column: "value", val: task.value + 1 }));
         }
         setBusy(false);
     };
     const handleProgressDown = () => {
-        if (!busy && task.progress > 0) {
+        if (!busy && task.value > 0) {
             setBusy(true);
             if (task.is_finished) {
                 dispatch(setUnfinished(task.id));
             }
-            dispatch(updateColumn({ task_id: task.id, column: "progress", val: task.progress - 1 }));
+            dispatch(updateColumn({ task_id: task.id, column: "value", val: task.value - 1 }));
         }
 
         setBusy(false);
     };
 
     return (
-        <PartsTaskContainer grid={task.value}>
+        <PartsTaskContainer>
             <SubButton onClick={handleProgressDown} />
-            {[...Array(task.value).keys()].map((slice, index) => (
-                <ProgressSlice key={index} isDone={task.progress > index} />
+            {[...Array(task.target).keys()].map((slice, index) => (
+                <ProgressSlice key={index} isDone={task.value > index} />
             ))}
             <AddButton onClick={handleProgressUp} />
         </PartsTaskContainer>

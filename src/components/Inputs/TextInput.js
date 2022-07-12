@@ -18,20 +18,15 @@ const TextInput = ({ label, value, setValue, ...rest }) => {
     };
 
     const handleChange = e => {
-        setValue(e.target.value);
+        if (e.target.value.length < 100) {
+            setValue(e.target.value);
+        }
     };
 
     return (
         <InputWrap>
             <StyledLabel isHidden={isHidden}>{label}</StyledLabel>
-            <StyledInput
-                autoComplete="new-password"
-                onFocus={handleFocus}
-                onBlur={e => handleBlur(e)}
-                value={value}
-                onChange={handleChange}
-                {...rest}
-            />
+            <StyledInput autoComplete="new-password" onFocus={handleFocus} onBlur={e => handleBlur(e)} value={value} onChange={handleChange} {...rest} />
             <Bar isFocused={isFocused} />
         </InputWrap>
     );

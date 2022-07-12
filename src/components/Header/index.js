@@ -5,21 +5,33 @@ import { Link } from "react-router-dom";
 import { BiPalette, BiTask } from "react-icons/bi";
 import ThemeSelectingModal from "./ThemeSelectingModal.js";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { isUserLoggedIn } from "../../utils/auth.js";
 import { setUserData } from "../../redux/userSlice.js";
 import { supabase } from "../../supabase/supabaseConfig.js";
+import { addToast } from "../../redux/toastSlice.js";
+import { useNavigate } from "react-router";
 
 const Header = ({ setActiveTheme, themes }) => {
     const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
-
+    const navigate = useNavigate();
     const dispatch = useDispatch();
+    const { user_id } = useSelector(store => store.user);
 
     useEffect(() => {
         if (isUserLoggedIn()) {
             dispatch(setUserData(supabase.auth.user()));
         }
     }, [dispatch]);
+
+    const handleLogout = async () => {
+        const { error } = await supabase.auth.signOut();
+        if (error) {
+            dispatch(addToast({ type: "error", message: error.message }));
+        }
+        dispatch(setUserData({ id: "", email: "" }));
+        navigate("/login");
+    };
 
     return (
         <>
@@ -40,9 +52,7 @@ const Header = ({ setActiveTheme, themes }) => {
                             Dashboard
                             <BiTask />
                         </StyledLink>
-                        <UserControls>
-                            <LoginLink to="/login">Login</LoginLink>
-                        </UserControls>
+                        <UserControls>{user_id ? <LogoutBtn onClick={handleLogout}>Logout</LogoutBtn> : <LoginLink to="/login">Login</LoginLink>}</UserControls>
                     </NavOptions>
                 </StyledNav>
             </HeaderContainer>
@@ -89,6 +99,14 @@ const StyledNav = styled.nav`
     margin: 0 auto;
 `;
 
+const LogoutBtn = styled.button`
+    border: none;
+    padding: 0.25rem;
+    background-color: ${({ theme }) => theme.colors.accent};
+    color: ${({ theme }) => theme.colors.primary};
+    cursor: pointer;
+`;
+
 const StyledLink = styled(Link)`
     font-size: 1.2rem;
     text-decoration: none;
@@ -129,19 +147,21 @@ const ThemeSelectButton = styled.button`
     margin-right: 2rem;
     font-size: 1.2rem;
     padding: 0.25rem;
+    background-color: ${({ theme }) => theme.colors.primary};
     color: ${({ theme }) => theme.colors.detail};
-    background: none;
     border: none;
+    padding: 0.5rem 1rem;
     display: flex;
     align-items: center;
     border-radius: 4px;
+    border: ${({ theme }) => `1px solid ${theme.colors.detail}`};
     svg {
         color: ${({ theme }) => theme.colors.accent};
         margin-left: 0.5rem;
     }
     :hover {
         cursor: pointer;
-        box-shadow: ${({ theme }) => theme.shadows.accent};
+        box-shadow: ${({ theme }) => theme.shadows.white80};
     }
 `;
 const NavOptions = styled.div`

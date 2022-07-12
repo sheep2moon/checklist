@@ -46,4 +46,6 @@ const DashboardContainer = styled.div`
     flex-direction: column;
     align-items: center;
     color: ${({ theme }) => theme.colors.detail};
+    box-shadow: ${({ theme }) => theme.shadows.black80};
+    border-radius: 8px;
 `;

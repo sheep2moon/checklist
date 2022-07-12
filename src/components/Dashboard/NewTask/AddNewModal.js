@@ -19,18 +19,22 @@ const AddNewModal = ({ section, isNewModalOpen, setIsNewModalOpen }) => {
     const dispatch = useDispatch();
 
     const handleAddTask = async () => {
+        if (name.length < 1) {
+            dispatch(addToast({ type: "error", message: "enter task name!" }));
+            return;
+        }
+
         const newTask = {
             user_id,
             name,
             type: taskType,
-            progress: 0,
             step: taskStep,
             value: taskValue,
             target: taskTarget,
             section
         };
 
-        const { data, error } = await supabase.from("tasks").insert([newTask]);
+        const { error } = await supabase.from("tasks").insert([newTask]);
         if (error) {
             dispatch(addToast({ type: "error", message: error.message }));
         } else {
@@ -55,7 +59,7 @@ const AddNewModal = ({ section, isNewModalOpen, setIsNewModalOpen }) => {
         <Backdrop onClick={() => setIsNewModalOpen(false)}>
             <ModalWrap onClick={e => e.stopPropagation()}>
                 <h2>Add new task</h2>
-                <TextInput label="Task title" value={name} setValue={setName} />
+                <TextInput autoFocus label="Task title" value={name} setValue={setName} />
                 <TypeSelect {...typeSelectProps} />
                 <StyledButton onClick={handleAddTask}>Add</StyledButton>
             </ModalWrap>

@@ -28,14 +28,6 @@ const Login = () => {
         }
     };
 
-    const handleGithubLogin = async () => {
-        let { user, error } = await supabase.auth.signIn({
-            provider: "github"
-        });
-        dispatch(setUserData(user));
-        console.log(user, error);
-    };
-
     return (
         <BgContainer>
             <LoginWrapper>
@@ -44,10 +36,10 @@ const Login = () => {
                     <Form onSubmit={e => handleLogin(e)}>
                         <TextInput label={"Email"} value={email} setValue={setEmail} />
                         <TextInput type="password" label={"Password"} value={password} setValue={setPassword} />
+                        <RegisterLink to="/register">
+                            <p>new user? register</p>
+                        </RegisterLink>
                         <StyledButton>Login</StyledButton>
-                        <RegisterLink to="/register">register</RegisterLink>
-                        <p>or</p>
-                        <StyledButton onClick={handleGithubLogin}>Login with Github</StyledButton>
                     </Form>
                 </FormWrapper>
             </LoginWrapper>
@@ -94,11 +86,12 @@ const Form = styled.form`
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2rem;
+    gap: 1.2rem;
     justify-content: center;
 `;
 
 const RegisterLink = styled(Link)`
-    font-size: 2rem;
-    color: ${({ theme }) => theme.colors.detail};
+    font-size: 1.2rem;
+    color: ${({ theme }) => theme.colors.accent};
+    text-decoration: none;
 `;
