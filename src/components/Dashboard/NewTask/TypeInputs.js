@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const TypeSelect = ({ taskType, setTaskType, taskValue, setTaskValue, taskStep, setTaskStep, taskTarget, setTaskTarget }) => {
+const TypeInputs = ({ taskType, taskValue, setTaskValue, taskStep, setTaskStep, taskTarget, setTaskTarget }) => {
     const handlePartsUp = () => {
         if (taskTarget < 10) setTaskTarget(taskTarget + 1);
     };
@@ -11,25 +11,16 @@ const TypeSelect = ({ taskType, setTaskType, taskValue, setTaskValue, taskStep, 
 
     return (
         <TypeContainer>
-            <p>Type of task</p>
-            <TypeWrap>
-                <TypeOption onClick={() => setTaskType("checkbox")} isActive={taskType === "checkbox"}>
-                    Checkbox
-                </TypeOption>
-                <TypeOption onClick={() => setTaskType("counter")} isActive={taskType === "counter"}>
-                    Counter
-                </TypeOption>
-                <TypeOption onClick={() => setTaskType("parts")} isActive={taskType === "parts"}>
-                    Parts
-                </TypeOption>
-            </TypeWrap>
             <TypeDetails>
                 {taskType === "parts" && (
-                    <TypeInputWrap>
-                        <button onClick={handlePartsDown}>-</button>
-                        <p>{taskTarget}</p>
-                        <button onClick={handlePartsUp}>+</button>
-                    </TypeInputWrap>
+                    <PartsDetails>
+                        <p>Select number of parts 1-10</p>
+                        <PartsInputsWrap>
+                            <button onClick={handlePartsDown}>-</button>
+                            <p>{taskTarget}</p>
+                            <button onClick={handlePartsUp}>+</button>
+                        </PartsInputsWrap>
+                    </PartsDetails>
                 )}
                 {taskType === "counter" && (
                     <PartsInputs>
@@ -52,18 +43,12 @@ const TypeSelect = ({ taskType, setTaskType, taskValue, setTaskValue, taskStep, 
     );
 };
 
-export default TypeSelect;
+export default TypeInputs;
 
 const TypeContainer = styled.div`
     > p {
         padding-bottom: 1rem;
     }
-`;
-
-const TypeWrap = styled.div`
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 1rem;
 `;
 
 const TypeDetails = styled.div`
@@ -81,7 +66,16 @@ const InputWrap = styled.div`
     align-items: center;
     justify-content: space-between;
 `;
-const TypeInputWrap = styled.div`
+
+const PartsDetails = styled.div`
+    display: flex;
+    flex-direction: column;
+    > p {
+        text-align: center;
+        padding: 0.5rem 0;
+    }
+`;
+const PartsInputsWrap = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;

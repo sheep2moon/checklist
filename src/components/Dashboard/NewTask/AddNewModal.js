@@ -5,8 +5,12 @@ import { addToast } from "../../../redux/toastSlice.js";
 import { supabase } from "../../../supabase/supabaseConfig.js";
 import TextInput from "../../Inputs/TextInput.js";
 import { StyledButton } from "../../Inputs/StyledButton.js";
-import TypeSelect from "./TypeSelect.js";
 import { fetchUserTasks } from "../../../redux/userSlice.js";
+import { HiViewBoards } from "react-icons/hi";
+import { AiOutlineCheck } from "react-icons/ai";
+import { IoTimerOutline } from "react-icons/io5";
+import { MdOutlineSwapVerticalCircle } from "react-icons/md";
+import TypeInputs from "./TypeInputs.js";
 
 const AddNewModal = ({ section, isNewModalOpen, setIsNewModalOpen }) => {
     const [name, setName] = useState("");
@@ -44,7 +48,7 @@ const AddNewModal = ({ section, isNewModalOpen, setIsNewModalOpen }) => {
         }
     };
 
-    const typeSelectProps = {
+    const typeInputsProps = {
         taskType,
         taskValue,
         taskStep,
@@ -55,12 +59,40 @@ const AddNewModal = ({ section, isNewModalOpen, setIsNewModalOpen }) => {
         setTaskTarget
     };
 
+    const taskTypes = [
+        {
+            type: "checkbox",
+            icon: <AiOutlineCheck />
+        },
+        {
+            type: "parts",
+            icon: <HiViewBoards />
+        },
+        {
+            type: "timer",
+            icon: <IoTimerOutline />
+        },
+        {
+            type: "counter",
+            icon: <MdOutlineSwapVerticalCircle />
+        }
+    ];
+
     return (
         <Backdrop onClick={() => setIsNewModalOpen(false)}>
             <ModalWrap onClick={e => e.stopPropagation()}>
                 <h2>Add new task</h2>
                 <TextInput autoFocus label="Task title" value={name} setValue={setName} />
-                <TypeSelect {...typeSelectProps} />
+                <TaskTypesWrap>
+                    {taskTypes.map(type => (
+                        <TaskCard key={type.type} isSelected={taskType === type.type} onClick={() => setTaskType(type.type)}>
+                            <h3>{type.type}</h3>
+                            {type.icon}
+                        </TaskCard>
+                    ))}
+                </TaskTypesWrap>
+                <TypeInputs {...typeInputsProps} />
+
                 <StyledButton onClick={handleAddTask}>Add</StyledButton>
             </ModalWrap>
         </Backdrop>
@@ -76,7 +108,7 @@ const Backdrop = styled.div`
     top: 0;
     bottom: 0;
     z-index: 1;
-    background-color: #00000020;
+    background-color: #00000040;
 `;
 const ModalWrap = styled.div`
     position: absolute;
@@ -85,6 +117,7 @@ const ModalWrap = styled.div`
     transform: translate(-50%, -50%);
     background-color: ${({ theme }) => theme.colors.primary};
     border: ${({ theme }) => `2px solid ${theme.colors.darkBlue}`};
+    box-shadow: ${({ theme }) => theme.shadows.black80};
     border-radius: 2rem;
     z-index: 0;
     padding: 3rem;
@@ -96,5 +129,23 @@ const ModalWrap = styled.div`
     > h2 {
         color: ${({ theme }) => theme.colors.accent};
         padding-bottom: 1rem;
+    }
+`;
+
+const TaskTypesWrap = styled.div`
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+`;
+const TaskCard = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    box-shadow: ${({ theme }) => theme.shadows.black80};
+    border-radius: 0.25rem;
+    outline: ${({ theme, isSelected }) => (isSelected ? `1px solid ${theme.colors.accent}` : "none")};
+    > h3 {
     }
 `;

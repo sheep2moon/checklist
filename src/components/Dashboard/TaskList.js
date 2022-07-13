@@ -22,7 +22,6 @@ const TaskList = ({ section }) => {
             const unfinished = [];
             tasks.forEach(task => {
                 if (task.section === section) {
-                    console.log(task);
                     if (task.is_finished === true) finished.push(task);
                     else unfinished.push(task);
                 }

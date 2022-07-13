@@ -16,6 +16,10 @@ export const SubButton = ({ ...rest }) => {
     );
 };
 
+export const IconButton = ({ children, ...rest }) => {
+    return <SButton {...rest}>{children}</SButton>;
+};
+
 const SButton = styled.button`
     background: ${({ theme }) => theme.colors.secondary};
     color: ${({ theme }) => theme.colors.detail};
