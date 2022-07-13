@@ -82,7 +82,7 @@ export default TaskList;
 
 const TaskContainer = styled.div`
     width: 100%;
-    padding: 0 1rem;
+    padding: 1rem 1rem;
     margin-top: 2rem;
     display: flex;
     flex-direction: column;

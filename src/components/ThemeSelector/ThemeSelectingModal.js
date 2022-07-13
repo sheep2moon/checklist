@@ -1,20 +1,26 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
+import { setTheme } from "../../redux/themeSlice.js";
+import { themes } from "../../themes.js";
+import { AiOutlineClose } from "react-icons/ai";
 
-const ThemeSelectingModal = ({ setIsThemeModalOpen, setActiveTheme, themes }) => {
-    const handleThemeChange = theme => {
-        setActiveTheme(theme);
-        localStorage.setItem("pickedTheme", JSON.stringify(theme.name));
-    };
+const ThemeSelectingModal = ({ setIsThemeModalOpen }) => {
+    const dispatch = useDispatch();
+
+    const handleSetTheme = name => dispatch(setTheme(name));
 
     return (
         <Backdrop onClick={() => setIsThemeModalOpen(false)}>
             <ModalWrap onClick={e => e.stopPropagation()}>
                 {themes.map(theme => (
-                    <ThemeOption key={theme.name} onClick={() => handleThemeChange(theme)} bgColor={theme.colors.primary} textColor={theme.colors.detail}>
+                    <ThemeOption key={theme.name} onClick={() => handleSetTheme(theme.name)} bgColor={theme.colors.primary} textColor={theme.colors.detail}>
                         <p>{theme.name}</p>
                     </ThemeOption>
                 ))}
+                <CloseBtn onClick={() => setIsThemeModalOpen(false)}>
+                    <AiOutlineClose />
+                </CloseBtn>
             </ModalWrap>
         </Backdrop>
     );
@@ -41,6 +47,7 @@ const ModalWrap = styled.div`
     border-radius: 2rem;
     z-index: 0;
     padding: 4rem;
+    padding-bottom: 1rem;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 1rem;
@@ -52,4 +59,21 @@ const ThemeOption = styled.div`
     color: ${({ textColor }) => textColor};
     background-color: ${({ bgColor }) => bgColor};
     box-shadow: ${({ theme }) => theme.shadows.black80};
+`;
+
+const CloseBtn = styled.button`
+    grid-column: span 3;
+    padding: 0.75rem;
+    background: none;
+    border: none;
+    border-radius: 0.5rem;
+    svg {
+        font-size: 1.4rem;
+        color: ${({ theme }) => theme.colors.detail};
+    }
+    transition: all 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
+    :hover {
+        transition: all 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
+        box-shadow: ${({ theme }) => theme.shadows.black40};
+    }
 `;

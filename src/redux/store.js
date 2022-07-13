@@ -1,12 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
-import loadingSlice from "./loadingSlice.js";
-import toastSlice from "./toastSlice.js";
-import userSlice from "./userSlice.js";
+import loadingReducer from "./loadingSlice.js";
+import themeReducer from "./themeSlice.js";
+import toastReducer from "./toastSlice.js";
+import userReducer from "./userSlice.js";
 
 export const store = configureStore({
     reducer: {
-        toast: toastSlice,
-        user: userSlice,
-        loading: loadingSlice
+        toast: toastReducer,
+        user: userReducer,
+        loading: loadingReducer,
+        theme: themeReducer
     }
 });

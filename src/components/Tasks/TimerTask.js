@@ -87,4 +87,3 @@ const TimeTaskWrap = styled.div`
 const Time = styled.p`
     min-width: 8rem;
 `;
-const StartStop = styled.button``;
