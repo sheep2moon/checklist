@@ -77,6 +77,7 @@ const MainPage = () => {
                         ))}
                     </TaskExamplesWrap>
                 </SectionContent>
+                <SectionHeading>Choose from 9 unique themes</SectionHeading>
             </MainPageContainer>
         </BgContainer>
     );

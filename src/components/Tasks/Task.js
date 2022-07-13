@@ -7,6 +7,7 @@ import CounterTask from "./CounterTask.js";
 import PartsTask from "./PartsTask.js";
 import { BsTrash } from "react-icons/bs";
 import { toggleConfetti } from "../../redux/toastSlice.js";
+import TimerTask from "./TimerTask.js";
 
 const Task = ({ task }) => {
     const dispatch = useDispatch();
@@ -28,6 +29,7 @@ const Task = ({ task }) => {
                     {task.type === "checkbox" && <CheckboxTask task={task} finishTask={finishTask} />}
                     {task.type === "counter" && <CounterTask task={task} finishTask={finishTask} />}
                     {task.type === "parts" && <PartsTask task={task} finishTask={finishTask} />}
+                    {task.type === "timer" && <TimerTask task={task} finishTask={finishTask} />}
                     <Controls>
                         <button onClick={handleDeleteTask}>
                             <BsTrash />
