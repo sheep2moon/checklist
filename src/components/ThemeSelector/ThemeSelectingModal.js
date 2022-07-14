@@ -8,7 +8,10 @@ import { AiOutlineClose } from "react-icons/ai";
 const ThemeSelectingModal = ({ setIsThemeModalOpen }) => {
     const dispatch = useDispatch();
 
-    const handleSetTheme = name => dispatch(setTheme(name));
+    const handleSetTheme = name => {
+        localStorage.setItem("pickedTheme", name);
+        dispatch(setTheme(name));
+    };
 
     return (
         <Backdrop onClick={() => setIsThemeModalOpen(false)}>
@@ -43,7 +46,8 @@ const ModalWrap = styled.div`
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: ${({ theme }) => theme.colors.primary};
-    border: ${({ theme }) => `2px solid ${theme.colors.darkBlue}`};
+    border: ${({ theme }) => `2px solid ${theme.colors.secondary}`};
+    box-shadow: ${({ theme }) => theme.shadows.black80};
     border-radius: 2rem;
     z-index: 0;
     padding: 4rem;

@@ -44,6 +44,7 @@ const NavWrap = styled.nav`
     @media (min-width: 768px) {
         display: none;
     }
+    z-index: 100;
 `;
 
 const NavOptions = styled.div`

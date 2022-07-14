@@ -17,7 +17,8 @@ function App() {
     const { theme } = useSelector(store => store.theme);
 
     useEffect(() => {
-        const themeName = JSON.parse(localStorage.getItem("pickedTheme"));
+        console.log(localStorage.getItem("pickedTheme"));
+        const themeName = localStorage.getItem("pickedTheme");
         if (themeName) {
             dispatch(setTheme(themeName));
         }

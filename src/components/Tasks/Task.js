@@ -46,7 +46,7 @@ export default Task;
 const TaskWrapper = styled.div`
     width: 100%;
     display: grid;
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: 1.2fr 2fr;
     align-items: center;
     font-size: 1.4rem;
     box-shadow: ${({ theme }) => theme.shadows.black40};
@@ -91,4 +91,5 @@ const TaskName = styled.h4`
     color: ${({ theme }) => theme.colors.detail};
     font-size: 1.4rem;
     vertical-align: middle;
+    margin-right: 1rem;
 `;

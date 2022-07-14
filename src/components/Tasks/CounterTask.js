@@ -10,7 +10,7 @@ const CounterTask = ({ task, finishTask }) => {
     const countUp = () => {
         const val = task.value + task.step;
         dispatch(updateColumn({ task_id: task.id, column: "value", val }));
-        if (val >= task.target) {
+        if (task.target > 1 && val >= task.target) {
             finishTask();
         }
     };
@@ -29,9 +29,11 @@ const CounterTask = ({ task, finishTask }) => {
                 <p>{task.step % 1 === 0 ? task.value : task.value.toFixed(2)}</p>
                 <AddButton onClick={countUp} />
             </CounterWrap>
-            <ProgressBar>
-                <Progress width={task.value / task.target > 1 ? 100 : (task.value / task.target) * 100} />
-            </ProgressBar>
+            {task.target > 1 && (
+                <ProgressBar>
+                    <Progress width={task.value / task.target > 1 ? 100 : (task.value / task.target) * 100} />
+                </ProgressBar>
+            )}
         </CounterTaskWrap>
     );
 };
